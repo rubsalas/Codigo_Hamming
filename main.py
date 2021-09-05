@@ -6,36 +6,178 @@ Main
 '''
 
 from hamming import *
+from converter import *
+from nrzi import *
 
-# Crea una instancia de Hamming
+
+# Instacia de Converter
+converter = Converter()
+
+# Instancia de Hamming
 hamming = Hamming()
 
+# Instancia de NRZI
+nrzi = NRZI()
 
-# Codificacion
 
-# Dato en binario del usuario por codificar
-information_to_code = "0110101" + "11001"
+# Funcion para correr el programa
+def run():
 
-# Paridad escogida por el usuario
-# 0 -> par , 1 -> impar
-parity_to_code = "1"
+    # Opcion que escogra el usuario a partir del menu por mostrar
+    opcion = 0
 
-# Inicia la codificacion de Hamming al dato del usuario
-hamming_code = hamming.code(information_to_code, parity_to_code)
-print("Código de Hamming:", hamming_code)
+    while opcion != 2:
 
-# Decodificacion
+        opcion = input("\nSeleccione una de las siguientes opciones: \n" +
+                           "-----------------------------------------------\n" +
+                           "| MENÚ                                        |\n" +
+                           "| 1) Ingresar un numero                       |\n" +
+                           "| 2) Salir                                    |\n" +
+                           "-----------------------------------------------\nSu opcion es: ")
 
-# Dato por decodificar
-code_to_decode_1 = "10001100101"
-code_to_decode_0 = "01011101101"
-code_to_decode_r1 = "10001100101010011"  # "10001100101110011"
+        # Si se escoge la opcion de "Ingresar un numero"
+        if opcion == "1":
 
-# Paridad utilizada al codificar
-# 0 -> par , 1 -> impar
-decoding_parity = "1"  # parity_to_code
+            octal_input = input("\nIngrese un numero en octal: \n")
 
-# Inicia la decodificacion de Hamming al codigo recibido
-informacion = hamming.decode(code_to_decode_r1, decoding_parity)
+            if len(octal_input) == 4 and is_octal(octal_input):
 
-print("Informacion decodificada:", informacion)
+                ######## Fase de conversión del numero ########
+
+                print("\n1) Tabla de conversiones:\n\n" +
+                      "-------------------------\n" +
+                      "| Conversion  |   Base  |\n" +
+                      "-------------------------")
+
+                dato_binario = converter.octal_to_binary(octal_input)
+                converter.octal_to_decimal(octal_input)
+                converter.octal_to_hexa(octal_input)
+
+                print("-------------------------\n")
+                ############ Fin de la fase #############
+
+
+                ######## Fase de la gráfica NRZI ########
+                print("2) Gráfica de codificación NRZI: \n")
+
+                nrzi.graph(dato_binario)
+
+                print("Se presenta en la ventana aparte.\n")
+                #############Fin de la fase##############
+
+
+                ###### Fase de codificación Hamming #####
+
+                print("3) Aplicación de la codificación Hamming: \n")
+
+                # Paridad por utilizar en Hamming, se dejara la impar asignada antes de que el usuario la escoja
+                paridad = "1"
+
+                # Flag para revisar la paridad
+                is_paridad_correct = False
+
+                # Para revisar que se ingrese una paridad aceptable
+                while not is_paridad_correct:
+
+                    # Se pide la paridad en un input con sus respectivas opciones
+                    paridad = input("Para iniciar la codificación, indique el tipo de paridad que desea utilizar: \n" +
+                                    "-----------------------------------------------\n" +
+                                    "| Opciones:                                   |\n" +
+                                    "| '0' Si desea utilizar paridad par           |\n" +
+                                    "| '1' Si desea utilizar paridad impar         |\n" +
+                                    "-----------------------------------------------\nSu opcion es: ")
+
+                    # Verifica que la paridad sea "1" o "0"
+                    if paridad == "1" or paridad == "0":
+                        is_paridad_correct = True
+                    else:
+                        print("Paridad invalida, intentelo de nuevo")
+
+                # Se llama la funcion de Hamming para codificar el numero binario
+                Dato_Codificado = hamming.code(dato_binario, paridad)
+
+                # Funcion para provocar el error en un bit del codigo de Hamming calculado
+                Dato_modificado = cambiar_bit(Dato_Codificado)
+
+                #print("Así queda el dato modificado: " + Dato_modificado)
+
+                dato_decodificado = hamming.decode(Dato_modificado, paridad)
+
+                print("Se decodifica el valor en binario inicial:", dato_decodificado)
+
+            #############Fin de la fase##############
+
+            else:
+                print("El numero ingresado no es de 4 digitos, no está en base 8 o el valor ingresado es inválido. "
+                      "Por favor ingrese el numero de nuevo.")
+
+        # Si se escoge la opcion de "Salir"
+        elif opcion == "2":
+            print("Finalizado")
+            break
+
+        # Si la opcion escogida es invalida00
+        else:
+            print("Opción invalida, intentelo de nuevo")
+
+
+# Revisa que el numero entrante sea octal
+def is_octal(input):
+
+    # Con el try intenta convertir el input en un int
+    try:
+        # Se verifica que sea int
+        if isinstance(int(input), int):
+
+            # Recorre cada valor del input
+            for ch in input:
+                # Convierte el valor actual del input a int y revisa que sea menor a 7
+                if int(ch) > 7:
+                    # Si es mayor, no es una opcion aceptable como numero octal
+                    return False
+
+            # Si todos son menores a 8, se acepta el input
+            return True
+
+        else:
+            return False
+
+    # El except agarra el ValueError si el input no es un int
+    except ValueError:
+        # No es una opcion aceptable como numero octal
+        return False
+
+
+# Funcion que recibe el dato ya codificado con Hamming y le permite al usuario modificar
+# alguno de los bits del dato para luego retornar el dato ya modificado
+def cambiar_bit(Dato_codificado):
+    posicion = 1
+    print("\n Posicion | bit")
+    for bit in Dato_codificado:
+        print("    " + str(posicion) + "        " + bit)
+
+        # Se inicia en la posicion 1
+        posicion += 1
+
+    posicion = int(input("\nDe acuerdo a la tabla anterior.\nIngrese la posicion del bit que desea modificar: \n"))
+
+    cont = 0
+    Dato_cambiado = ""
+    while cont < len(Dato_codificado):
+        if cont == posicion:
+            if Dato_codificado[posicion] == '1':
+                Dato_cambiado = Dato_cambiado + "0"
+                cont += 1
+            else:
+                Dato_cambiado = Dato_cambiado + "1"
+                cont += 1
+        else:
+            Dato_cambiado = Dato_cambiado + Dato_codificado[cont]
+            cont += 1
+    return Dato_cambiado
+
+
+'''
+Empieza el programa
+'''
+run()
