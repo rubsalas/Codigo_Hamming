@@ -13,9 +13,6 @@ from nrzi import *
 # Instacia de Converter
 converter = Converter()
 
-# Instancia de Hamming
-hamming = Hamming()
-
 # Instancia de NRZI
 nrzi = NRZI()
 
@@ -27,6 +24,9 @@ def run():
     opcion = 0
 
     while opcion != 2:
+
+        # Instancia de Hamming
+        hamming = Hamming()
 
         opcion = input("\nSeleccione una de las siguientes opciones: \n" +
                            "-----------------------------------------------\n" +
@@ -151,30 +151,62 @@ def is_octal(input):
 # Funcion que recibe el dato ya codificado con Hamming y le permite al usuario modificar
 # alguno de los bits del dato para luego retornar el dato ya modificado
 def cambiar_bit(Dato_codificado):
-    posicion = 1
-    print("\n Posicion | bit")
+
+    # Se inicia la posicion del primer bit en 1
+    position_index = 1
+
+    print("\n Posición | bit")
+
+    # Se itera sobre el codigo
     for bit in Dato_codificado:
-        print("    " + str(posicion) + "        " + bit)
+        print("    " + str(position_index) + "        " + bit)
 
         # Se inicia en la posicion 1
-        posicion += 1
+        position_index += 1
 
-    posicion = int(input("\nDe acuerdo a la tabla anterior.\nIngrese la posicion del bit que desea modificar: \n"))
+    # Flag para ver si la posicion es correcta
+    is_position_correct = False
 
-    cont = 0
-    Dato_cambiado = ""
-    while cont < len(Dato_codificado):
-        if cont == posicion:
-            if Dato_codificado[posicion] == '1':
-                Dato_cambiado = Dato_cambiado + "0"
-                cont += 1
+    # Se verifica que el input ingresado sea correcto
+    while not is_position_correct:
+
+        # Input
+        posicion_input = input("\nDe acuerdo a la tabla anterior.\nIngrese la posicion del bit que desea modificar: \n")
+
+        # Con el try intenta convertir el input en un int
+        try:
+            # Se verifica que sea int
+            if isinstance(int(posicion_input), int) and 0 < int(posicion_input) <= len(Dato_codificado):
+
+                # Se actualiza la posicion para poder encontrar el valor que es
+                posicion = int(posicion_input) - 1
+
+                cont = 0
+                Dato_cambiado = ""
+                while cont < len(Dato_codificado):
+                    if cont == posicion:
+                        if Dato_codificado[posicion] == '1':
+                            Dato_cambiado = Dato_cambiado + "0"
+                            cont += 1
+                        else:
+                            Dato_cambiado = Dato_cambiado + "1"
+                            cont += 1
+                    else:
+                        Dato_cambiado = Dato_cambiado + Dato_codificado[cont]
+                        cont += 1
+                return Dato_cambiado
+
             else:
-                Dato_cambiado = Dato_cambiado + "1"
-                cont += 1
-        else:
-            Dato_cambiado = Dato_cambiado + Dato_codificado[cont]
-            cont += 1
-    return Dato_cambiado
+
+                is_position_correct = False
+                print("Error, por favor intente de nuevo.")
+
+        # El except agarra el ValueError si el input no es un int
+        except ValueError:
+
+            is_position_correct = False
+            print("Error, por favor intente de nuevo.")
+
 
 
 '''
