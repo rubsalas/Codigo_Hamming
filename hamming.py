@@ -16,7 +16,6 @@ class Hamming:
         # Instacia del Convertidor
         self.converter = Converter()
 
-
         # Informacion entrante del usuario en binario para codificar
         self.code_information = ""
 
@@ -37,7 +36,6 @@ class Hamming:
 
         # Codigo de Hamming saliente
         self.coded_information_output = ""
-
 
         # Codigo de Hamming entrante
         self.coded_information_input = ""
@@ -66,13 +64,11 @@ class Hamming:
         # Informacion saliente al usuario en binario ya decodificada
         self.decoded_information = ""
 
-
     ####################################################################################
     #                                                                                  #
     #                                     Coding                                       #
     #                                                                                  #
     ####################################################################################
-
 
     # Inicia el proceso de Codificacion de Hamming
     def code(self, information, parity_type):
@@ -112,9 +108,6 @@ class Hamming:
         # Retorna el codigo con la informacion codificada lista
         return self.coded_information_output
 
-
-
-
     ##########################################
     #                                        #
     #                Entrada                 #
@@ -152,7 +145,6 @@ class Hamming:
 
             print("Tipo de paridad por utilizar: " + str(self.decode_parity_type))
 
-
     ##########################################
     #                                        #
     #          Variables Iniciales           #
@@ -171,18 +163,18 @@ class Hamming:
         self.code_n = self.set_information_digits_quantity(self.code_information)
 
         # Imprime la cantidad de digitos de informacion por codificar
-        print("n = " + str(self.code_n))
+        #print("n = " + str(self.code_n))
 
         # Define la cantidad de bits de paridad que necesitara (p)
         self.code_p = self.set_parity_bits_quantity(self.code_n)
 
         # Imprime la cantidad de bits de paridad
-        print("p = " + str(self.code_p))
+        #print("p = " + str(self.code_p))
 
         # Define el total de digitos del codigo saliente
         self.code_n_p = self.set_total_quantity(self.code_n, self.code_p)
 
-        print("H(" + str(self.code_n_p) + "," + str(self.code_n) + ")")
+        #print("H(" + str(self.code_n_p) + "," + str(self.code_n) + ")")
 
     # Obtiene el numero en binario como un string para obtener la cantidad de digitos que posee
     def set_information_digits_quantity(self, information):
@@ -204,7 +196,6 @@ class Hamming:
     def set_total_quantity(self, n, p):
         # Obtiene la cantidad total de digitos
         return n + p
-
 
     ##########################################
     #                                        #
@@ -379,7 +370,6 @@ class Hamming:
 
         return matrix
 
-
     ##########################################
     #                                        #
     #          Calculo de Paridades          #
@@ -423,7 +413,7 @@ class Hamming:
             self.decode_matrix = matrix_no_parities
 
         else:
-            print("calculate_parities(self, parity_type, p, n_p, matrix, type): Error")
+            print("Error: calculate_parities(self, parity_type, p, n_p, matrix, type)")
 
     # Obtiene los valores para cada fila donde se calculara una paridad en la tabla
     # Retorna una lista de dos valores: la matriz actualizada y
@@ -501,7 +491,6 @@ class Hamming:
                             # Se juntan los valores de la paridad actual en un solo valor binario
                             # para formar una lista solo con los valores por calcular la paridad
                             partial_parities_list[p_i] += data_row[pos]
-
 
                     # Se saltan las posiciones en las que se encuentran las paridades
                     if titles_row[pos][0] != "p":
@@ -632,7 +621,6 @@ class Hamming:
         # Retorna la matriz actualizada
         return matrix
 
-
     ##########################################
     #                                        #
     #         Informacion Codificada         #
@@ -687,15 +675,11 @@ class Hamming:
         # Retorna el codigo completo
         return code
 
-
-
-
     ####################################################################################
     #                                                                                  #
     #                                    Decoding                                      #
     #                                                                                  #
     ####################################################################################
-
 
     # Inicia el proceso de Decodificacion de Hamming y su Verificacion de Errores
     def decode(self, information, parity_type):
@@ -745,9 +729,11 @@ class Hamming:
         # Imprime la matriz completa actualizada
         self.print_table(self.decode_matrix)
 
+        # Imprime donde se encuentra el bit en error
+        print("Posición del bit en error:", self.decode_bit_in_error)
+
         # Retorna la informacion decodificada
         return self.decoded_information
-
 
     ##########################################
     #                                        #
@@ -770,15 +756,15 @@ class Hamming:
         self.decode_p = self.get_parity_bits_quantity(self.decode_n_p)
 
         # Imprime la cantidad de bits de paridad
-        print("p = " + str(self.decode_p))
+        #print("p = " + str(self.decode_p))
 
         # Guarda la cantidad de digitos de informacion en el codigo (n)
         self.decode_n = self.get_information_digits_quantity(self.decode_n_p, self.decode_p)
 
         # Imprime la cantidad de digitos de informacion por decodificar
-        print("n = " + str(self.decode_n))
+        #print("n = " + str(self.decode_n))
 
-        print("H(" + str(self.decode_n_p) + "," + str(self.decode_n) + ")")
+        #print("H(" + str(self.decode_n_p) + "," + str(self.decode_n) + ")")
 
     # Obtiene el total de digitos del codigo por decodificar
     def get_total_quantity(self, code):
@@ -803,14 +789,11 @@ class Hamming:
         # Obtiene la cantidad de digitos de informacion
         return n_p - p
 
-
-
     ##########################################
     #                                        #
     #          Revision de Codigo            #
     #                                        #
     ##########################################
-
 
     '''
     5.D. Revision de Codigo
@@ -834,8 +817,7 @@ class Hamming:
         # Se guarda la posicion en binario que esta con un error
         self.decode_bit_in_error = bit_to_fix
 
-        print("Posicion del Bit en Error:", self.decode_bit_in_error)
-
+        #print("Posicion del Bit en Error:", self.decode_bit_in_error)
 
     # Se calculan las paridades del codigo
     # Se agregan sus valores a la matriz
@@ -893,7 +875,6 @@ class Hamming:
 
         # Retorna la lista de paridades con error
         return error_parity_list
-
 
     # Se analizan cuales bits estan incorrectos
     # Se agrega su estado a la matriz (tabla queda completa)
@@ -999,8 +980,6 @@ class Hamming:
 
         return bit_to_fix
 
-
-
     ##########################################
     #                                        #
     #          Correcion de Error            #
@@ -1017,8 +996,9 @@ class Hamming:
 
         # Si se encuentra un bit en error en el codigo
         if bit_in_error == "0":
-            print("El código no tiene errores")
+            #print("El código no tiene errores")
 
+            # Se pasa la informacion obtenida a la que estaria arreglada
             self.coded_information_fixed = self.coded_information_input
 
         # Si hay un error al encontrar el bit en error y no se cambia la variable
@@ -1030,7 +1010,6 @@ class Hamming:
             self.coded_information_fixed = self.fix_bit_in_error(bit_in_error, matrix)
 
             #print("self.coded_information_fixed:", self.coded_information_fixed)
-
 
     # Se busca el bit en error en el codigo existente y se cambia por el correcto
     def fix_bit_in_error(self, bit_in_error, matrix):
@@ -1094,14 +1073,11 @@ class Hamming:
         # Se actualiza el codigo
         return fixed_code
 
-
-
     ##########################################
     #                                        #
     #            Decodificacion              #
     #                                        #
     ##########################################
-
 
     '''
     7. Decodificacion del codigo
@@ -1136,9 +1112,6 @@ class Hamming:
 
         #print("\nself.decoded_information:", self.decoded_information)
 
-
-
-
     ####################################################################################
     #                                                                                  #
     #                                 Conversiones                                     #
@@ -1159,22 +1132,155 @@ class Hamming:
         # Retorna el binario completo
         return raw_bin
 
-
-
     ####################################################################################
     #                                                                                  #
     #                                  Impresion                                       #
     #                                                                                  #
     ####################################################################################
 
-
-    # Imprime la tabla a partir de la matrix utilizada para codificar
+    # Imprime la tabla a partir de la matriz utilizada para codificar
     def print_table(self, matrix):
 
-        print("")
+        # Se obtienen los tamanos de cada columna
+        col_lengths = self.get_lengths(matrix)
 
-        # Recorre cada fila de la matriz
+        # Se hacen los valores de la matriz del mismo tamano por columna
+        same_length_matrix = self.set_table_lengths(matrix, col_lengths)
+
+        # Se pasa la matriz a un formato de tabla, con sus respectivas divisiones
+        # Se obtiene una lista con las filas de la tabla
+        table_list = self.format_matrix_as_table(same_length_matrix)
+
+        # Imprime la tabla
+        for row in table_list:
+            print(row)
+
+    # Obtiene los largos de cada texto para saber cual es el mayor tamano por columna
+    # Retorna una lista con el tamano mas grande por columna
+    def get_lengths(self, matrix):
+
+        # Lista con el ancho maximo de cada columna
+        max_col_len_list = []
+
+        # Se iteran las columnas para que la lista tenga un dato inicial en 0
+        # por columna, para comparar en la funcion
+        for i in range(len(matrix[0])):
+            max_col_len_list.append(0)
+
+        # Se itera atraves de las filas de la matriz
         for row in matrix:
 
-            # Imprime la fila
-            print(row)
+            # Indice de la columna actual
+            col_index = -1
+
+            # Se itera atravez de las columnas en cada fila
+            for col in row:
+
+                # Se agrega el valor del indice de la columna actual
+                col_index += 1
+
+                # Largo del texto de la columna en esta fila
+                col_len_actual = len(col)
+
+                # Se revisa si el valor maximo guardado en la lista de largos es mayor
+                # al actual
+                if col_len_actual > max_col_len_list[col_index]:
+
+                    # Como se encuentra un valor mas grande, se cambia en la lista
+                    max_col_len_list[col_index] = col_len_actual
+
+            # Se imprime la lista de los valores mas grandes
+            #print(max_col_len_list)
+
+        # Retorna la lista de los tamanos de las columnas
+        return max_col_len_list
+
+    # Se hacen los valores de la matriz del mismo tamano por columna
+    def set_table_lengths(self, matrix, lengths):
+
+        # Indice de la fila actual
+        row_i = -1
+
+        # Se itera atraves de las filas de la matriz
+        for row in matrix:
+
+            # Se agrega el valor del indice de la fila actual
+            row_i += 1
+
+            # Indice de la columna actual
+            col_i = -1
+
+            # Se itera atravez de las columnas en cada fila
+            for col in row:
+
+                # Se agrega el valor del indice de la columna actual
+                col_i += 1
+
+                # Se obtiene la cantidad de digitos faltantes para el valor actual
+                needs = lengths[col_i] - len(col)
+
+                # Se verifica si se necesitan agregar espacios
+                if needs > 0:
+
+                    # Para cada espacio que necesite
+                    for space_i in range(needs):
+
+                        # Se agregan los espacios necesarios a cada valor
+                        if space_i % 2 == 0:
+                            # Se agrega un espacio al final
+                            col += " "
+                        else:
+                            # Se agrega un espacio al inicio
+                            col = " " + col
+
+                # Se actualiza el valor en la matriz
+                matrix[row_i][col_i] = col
+
+        # Se retorna la matriz actualizada
+        return matrix
+
+    # Se pasa la matriz a un formato de tabla
+    def format_matrix_as_table(self, matrix):
+
+        # Lista que guardara los strings con la informacion de las filas
+        matrix_as_table = []
+
+        # Lista que guardara toda la inforacion y sus respectivas divisiones
+        table = []
+
+        # Linea horizontal de la tabla
+        horizontal_division = ""
+
+        # Se itera atraves de las filas de la matriz
+        for row in matrix:
+
+            # String con los datos de esta fila
+            row_string = "|"
+
+            # Se recorre cada valor de la matriz
+            for value in row:
+
+                # Se agrega el valor actual
+                row_string += " " + value + " |"
+
+            # Se agrega el string a la lista
+            matrix_as_table.append(row_string)
+
+        # Se itera por la cantidad de caracteres en las filas
+        for i in range(len(matrix_as_table[0])):
+            # Se agregan la misma cantidad de caracteres para crear las divisiones de la tabla
+            horizontal_division += "-"
+
+        # Se agrega la primera division
+        table.append(horizontal_division)
+
+        # Se itera atraves de las filas en la lista de strings
+        for row in matrix_as_table:
+
+            # Se agregan los datos
+            table.append(row)
+            # Se agrega la division debajo de los datos
+            table.append(horizontal_division)
+
+        # Retorna la lista completa con los strings de la tabla hecha
+        return table
